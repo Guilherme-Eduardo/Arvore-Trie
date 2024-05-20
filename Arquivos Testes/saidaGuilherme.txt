@@ -1,0 +1,27 @@
+hello world
+a
+	b
+		a
+			c
+				a
+					x
+						i
+							\0
+e
+	d
+		u
+			a
+				r
+					d
+						o
+							\0
+g
+	u
+		i
+			l
+				h
+					e
+						r
+							m
+								e
+									\0
