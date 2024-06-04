@@ -5,8 +5,9 @@ int main (int argc, char* argv[]) {
     printf ("hello world\n");
 
     PONT raiz = criaNo ();
-    insere (raiz,"guilherme", 12);
-    insere (raiz,"gui o brabo", 14);
+    insere (raiz, "GUILHERME", 12);
+    imprimeArvore(raiz, 0);
+    insere (raiz,"gui o BRabo", 14);
     insere (raiz,"gui a maquina", 10);
 
     imprimeArvore (raiz, 0);
@@ -15,7 +16,6 @@ int main (int argc, char* argv[]) {
         printf ("encontrei\n");
     else printf ("Nao encontrei a palavra\n");
 
-    printf ("Testando Prefixo\n");
     insere (raiz,"rocky", 19);
     insere (raiz,"rocky i", 20);
     insere (raiz,"rocky ii", 21);
@@ -23,7 +23,6 @@ int main (int argc, char* argv[]) {
 
     imprimeArvore(raiz, 0);
 
-    filmesComPrefixo(raiz, "p Rocky");
     return 0;
 }
 

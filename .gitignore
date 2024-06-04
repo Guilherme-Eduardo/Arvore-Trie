@@ -53,6 +53,7 @@ Mkfile.old
 dkms.conf
 =======
 *.o
-qualFilme
+main
+a
 converte
 >>>>>>> bd7772b (Initial Commit)

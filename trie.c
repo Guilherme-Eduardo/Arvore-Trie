@@ -1,11 +1,14 @@
+/*
+    Possiveis problemas: Ele insere nomes duplicados
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <string.h>
 #include <ctype.h>
 #include "trie.h"
 
-#define N_ALFABETO 38
+#define N_ALFABETO 26
 
 struct no* criaNo () {
     PONT p = NULL;
@@ -20,28 +23,42 @@ struct no* criaNo () {
     return p;
 }
 
+/*void destroi_no () {
+
+
+}*/
+
 int mapearIndice(char c) {
-    if (c == '\0') return 0;
-    if (c == ' ') return 1;
-    if (c >= '0' && c <= '9') return c - '0' + 2;
-    if (c >= 'a' && c <= 'z') return c - 'a' + 12;
-    else return 63;
+    if (c >= 'a' && c <= 'z') return c - 'a';
+    else return -1;
+}
+
+void palavra_miniscula (char *chave) {
+    if (!chave) return;    
+    int i;
+    for (i = 0; i < strlen (chave); i++) {        
+            chave[i] = tolower(chave[i]);
+    }
+    chave [++i] = '\0';
 }
 
 void insere (PONT raiz, char *chave, int valor) {
     if (!raiz || !chave) return;
 
     int indice;
-    int tamChave = strlen (chave);
-    PONT aux = raiz;
+    char copia_chave [strlen (chave) + 1];
+    strcpy (copia_chave, chave);
+    palavra_miniscula (copia_chave);       
+    PONT aux = raiz;    
 
-    for (int i = 0; i < tamChave; i++) {
-        indice = mapearIndice(chave[i]);
-        if (!aux->filhos[indice])
-            aux->filhos[indice] = criaNo ();
-        aux = aux->filhos[indice];
-    }
-    aux->filhos[0] = criaNo();
+        for (int i = 0; i < strlen (copia_chave); i++) {
+            indice = mapearIndice(copia_chave[i]);   
+            if (indice >= 0) {
+                if (!aux->filhos[indice])
+                    aux->filhos[indice] = criaNo ();
+                aux = aux->filhos[indice];                
+            }
+    }    
     aux->fim = 1;
     aux->valor = valor;
 }
@@ -61,30 +78,10 @@ struct no* busca (PONT raiz, char *chave) {
     return aux;
 }
 
-
-char* formataPalavra(char *chave) {
-    if (!chave) return NULL;
-    int tamToken;
-    // Pega o primeiro token (ignora o comando "p")
-    char *token = strtok(chave, " ");
-    // Pega o segundo token (a palavra que queremos)
-    token = strtok(NULL, " ");
-
-    // Verifica se o token foi encontrado
-    if (!token) return NULL;
-    for (int i = 0; token[i]; i++) {
-        token[i] = tolower(token[i]);
-    }  
-    return token;
-}
-
 char converteIndiceParaLetra(int indice) {
-    if (indice == 0) return '\0';
-    if (indice == 1) return ' ';
-    if (indice >= 2 && indice <= 11) return (char)('0' + (indice - 2));
-    if (indice >= 12 && indice <= 37) return (char)('a' + (indice - 12));
-    else return '?';
+    return indice + 'a';
 }
+
 
 void imprimeTabulacao(int nivel) {
     for (int i = 0; i < nivel; i++) {
@@ -120,41 +117,23 @@ void imprime (PONT raiz, char *chave) {
     }
 }
 
-
-void filmesComPrefixo(PONT raiz, char* chave) {
-    if (!raiz || !chave) return;
-    
-    // Faz uma cópia da palavra para não alterar a variável original
-    char *chaveFormatada = strdup(chave);
-    if (!chaveFormatada) {
-        fprintf(stderr, "Erro ao copiar a palavra\n");
-        return;
-    }
-
-    char *token = formataPalavra(chaveFormatada);
-    if (!token) {
-        fprintf(stderr, "Erro ao formatar a palavra\n");
-        free(chaveFormatada); // Libera a memória da cópia
-        return;
-    }
-
-    PONT atual = busca(raiz, token);
-    if (atual) {
-        for (int i = 0; i < N_ALFABETO; i++) {
-            printf("%s", token);
-            imprime(atual, token);
-        }
-    }        
-    else fprintf(stderr, "Palavra não encontrada\n");
-    
-    // Libera a memória da cópia
-    free(chaveFormatada);
-}
-
-
 // https://www.youtube.com/watch?v=MEmLEYhna-I
 // Raiz nao possui valor
 // Dados estão nas folhas
 // Indice são caracteres que são colocados nos nós
 // Será que precisamos  estipular valores para cada palavra? Ex: 1,2,3,4...
 // Video aula = https://www.youtube.com/watch?v=Spmw4hTo7ek
+
+/* Como já dito nos comentários, strings declaradas como char *string = "" não podem ser modificadas. Mas por que?
+
+A razão dela não poder ser modificada, é porque você criou um ponteiro que referencia uma string estática, ou seja, foi criada em tempo de compilação. Essa string será armazenada nos binários do seu programa compilado, e não no contexto da sua função (ou da pilha de memória).
+
+Não apenas isso, mas o seu programa é otimizado para que todas as strings estáticas idênticas apontem para o mesmo endereço de memória.
+
+Por exemplo, no seguinte código:
+
+char *str1 = "XXX";
+char *str2 = "XXX";
+str1 e str2 não são apenas strings idênticas, elas são exatamente a mesma string no endereço de memória, o que significa que se você modificar str1, estaria modificando str2.
+
+Isso abre a possibilidade de diversos problemas com strings sendo declaradas em arquivos diferentes sendo acidentalmente modificadas. Por tal razão o compilador irá tentar te impedir de modificar tais strings, e você também deveria evitar faze-lo, mesmo que consiga burlar a verificação.*/

@@ -1,7 +1,7 @@
 #ifndef _TRIE_H
 #define _TRIE_H
 
-#define N_ALFABETO 38
+#define N_ALFABETO 26
 
 struct no {
     char valor;
@@ -15,8 +15,8 @@ struct no* criaNo ();
 void insere (PONT, char*, int);
 struct no* busca (PONT,char*);
 void imprimeArvore (PONT, int);
-void filmesComPrefixo (PONT, char*);
-void maiorPrefixo (PONT);
+
+
 
 
 #endif
