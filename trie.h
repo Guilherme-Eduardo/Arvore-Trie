@@ -15,7 +15,12 @@ struct no* criaNo ();
 void insere (PONT, char*, int);
 struct no* busca (PONT,char*);
 void imprimeArvore (PONT, int);
+void consulta_trie (PONT, char*, int);
 
+/*************dictionary *****************/
+
+FILE *abreDicionario (char *);
+int preencheArvoreComDicionario (PONT, FILE*);
 
 
 
