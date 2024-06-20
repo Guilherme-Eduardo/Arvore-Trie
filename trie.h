@@ -21,6 +21,9 @@ void consulta_trie (PONT, char*, int);
 
 FILE *abreDicionario (char *);
 int preencheArvoreComDicionario (PONT, FILE*);
+void buscaPalavras(PONT, const char *, int);
+char *separa(char *, char);
+void removeNovaLinha(char *);
 
 
 

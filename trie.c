@@ -79,53 +79,9 @@ struct no* busca (PONT raiz, char *chave) {
     return aux;
 }
 
-struct no* busca_consulta (PONT raiz, char *chave, int distancia) {
-    if (!raiz || !chave) return NULL;
-    int caracter_invalido;
-    int tamChave, indice, indice_aux;
-    tamChave = strlen (chave);
-    PONT aux = raiz;
-
-    for (int i = 0; i < tamChave + distancia, caracter_invalido > distancia; i++) {
-        indice = mapearIndice(chave[i]);
-        if (!aux->filhos[indice]) {
-            caracter_invalido++;
-            indice_aux = ++indice;
-            while (!aux->filhos[indice_aux])
-                indice_aux++;
-        }
-            
-        aux = aux->filhos[indice_aux];
-    }
-    return aux;
-}
-
 char converteIndiceParaLetra(int indice) {
-    return indice + 'a';
-}
-
-void consulta_trie (PONT raiz, char *chave, int distancia) {
-    if (!raiz || !chave) return;
-
-    int caracter_invalido, caracter_valido, i, i_anteior;
-    caracter_invalido = caracter_valido = 0;
-
-    PONT atual, anterior;
-    PONT atual = raiz;
-
-    for (i = 0; i < N_ALFABETO; ++i) {
-        if (atual->filhos[mapearIndice(chave[i])]) {
-            caracter_valido++;
-            atual = atual->filhos[mapearIndice(chave[i])];
-        }
-        else         
-            caracter_invalido++;
-        if (caracter_invalido >= distancia) {
-            atual = raiz;
-        }
-    }
-
-}
+     return indice + 'a';
+ }
 
 void imprimeTabulacao(int nivel) {
     for (int i = 0; i < nivel; i++) {
@@ -265,6 +221,24 @@ void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
         dp[i] = i;
     }
     busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp);  // Chama a função busca
+}
+
+// Funcao responsavel por separar as palavras dependendo de um char separador
+char *separa(char *linha, char separador) {
+    if (!linha)
+        return NULL; // Se a linha passada por parametro já for nula
+
+    char *posSeparador;
+    posSeparador = strchr(linha, separador);
+
+    if (!posSeparador) { // Se nao encontrar a virgula, verifica se nao chegou na ultima parte a ser lida (antes do \)
+        if (strlen(linha))
+            return linha;
+        else
+            return NULL;
+    }
+    *posSeparador = '\0'; // Substitui o separador por um '\0' que indicara o final da string
+    return linha;
 }
 
 
