@@ -5,6 +5,14 @@
 
 int main (int argc, char* argv[]) {
 
+    /* 
+        Precisamos ver como ira funcionar essa questao de passar o dicionario como parametro da funcao, pois o professor não explicou isso
+        digo "./<nome_do_programa> dicionario.txt" ----> não sei se é essa forma de passar o dicionario.
+        só sei que precisamos passar o teste e depois jogar a saida num outro arquivo
+        ex: ./<nome_do_programa> < entrada.txt > saida.txt
+        Além disso, precisamos ver como cada arquivo ira se chamar
+    
+    */
     if (argc <= 1 ) {
         fprintf (stderr, "Erro ao abrir arquivos\n");
         return 1;
@@ -12,23 +20,26 @@ int main (int argc, char* argv[]) {
 
     char linha[100], *palavra, *distanciaEdicaoStr;
     int distanciaEdicaoNum;
-
     char copiaPalavra[100];
     
-    PONT raiz = criaNo ();
-    FILE *dicionario = abreDicionario (argv[1]);
-    preencheArvoreComDicionario (raiz, dicionario);
-
-    while (fgets (linha, sizeof(linha), stdin)) {        
-        palavra = separa (linha, ' ');
+    PONT raiz = criaNo ();                                          /*Cria a raiz da nossa arvore trie*/
+    FILE *dicionario = abreDicionario (argv[1]);                    /*Aqui eu estou passando o dicionario do argv e adicionando ele na variavel FILE */
+    preencheArvoreComDicionario (raiz, dicionario);                 /*Lê arquivo e joga na arvore (é bom testar a funcao. Eu acho que está funcionando (usei a funcao imprime para isso))*/
+        
+   while (fgets (linha, sizeof(linha), stdin)) {                   /*Enquanto nao chega no fim do arquivo que foi mandado pela entrada padrao (stdin) faça...*/
+        palavra = separa (linha, ' ');                              /*Separo as informacoes que foram passadas no arquivo de entrada em 2 variaveis*/
         strcpy (copiaPalavra, palavra);
         palavra += strlen (palavra) + 1;
         distanciaEdicaoStr = separa (palavra, ' ');
-        distanciaEdicaoNum = atoi (distanciaEdicaoStr);
-        printf ("nome: %s\nErros: %d\n", copiaPalavra, distanciaEdicaoNum);
+        distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
+        //printf ("nome: %s\nErros: %d\n", copiaPalavra, distanciaEdicaoNum);
+        buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
+
+        /*O método que está no enunciado é o de distancia de edição, é um pouco confuso no começo, mas da pra entender. Usa como se fosse uma matriz para comparar o quanto uma palavra esta distante da outra*/
+
     }
 
-
+    //testes que eu fiz
 
     /*
     insere (raiz, "GUILHERME", 12);
@@ -53,6 +64,8 @@ int main (int argc, char* argv[]) {
     imprimeArvore(raiz, 0);
 
     */
+
+    
     fclose (dicionario);
     return 0;
 }

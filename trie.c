@@ -1,5 +1,6 @@
 /*
-    Possiveis problemas: Ele insere nomes duplicados
+    verificar se ele insere nomes duplicados
+    verificar se é preciso colocar o caracter '\0' na arvore
 */
 
 #include <stdio.h>
@@ -10,6 +11,7 @@
 
 #define N_ALFABETO 26
 
+/*Funcao responsavel por criar o no*/
 struct no* criaNo () {
     PONT p = NULL;
     p = (PONT) malloc (sizeof(struct no));
@@ -23,16 +25,19 @@ struct no* criaNo () {
     return p;
 }
 
+/*Funcao responsavel por liberar toda a memoria do no*/
 /*void destroi_no () {
 
 
 }*/
 
+/* Informa qual é o indice do vetor referente a letra. Ex: a == 0 (97 - 97), b == 1 ...*/
 int mapearIndice(char c) {
     if (c >= 'a' && c <= 'z') return c - 'a';
     else return -1;
 }
 
+/*Converte todas a letras da palavra para miniscula*/
 void palavra_miniscula (char *chave) {
     if (!chave) return;    
     int i;
@@ -42,27 +47,29 @@ void palavra_miniscula (char *chave) {
     chave [++i] = '\0';
 }
 
+/*Funcao responsavel por inserir as palavras do dicionario na arvore*/
 void insere (PONT raiz, char *chave, int valor) {
     if (!raiz || !chave) return;
 
     int indice;
     char copia_chave [strlen (chave) + 1];
-    strcpy (copia_chave, chave);
+    strcpy (copia_chave, chave);                                    /*Preciso criar uma copia da palavra, pois eu não consigo modificar uma string constante*/
     palavra_miniscula (copia_chave);       
     PONT aux = raiz;    
 
-    for (int i = 0; i < strlen (copia_chave); i++) {
-        indice = mapearIndice(copia_chave[i]);   
+    for (int i = 0; i < strlen (copia_chave); i++) {                /*Percorre pelo tamanho da palavra*/    
+        indice = mapearIndice(copia_chave[i]);                      /*Verifica qual eh o indice do vetor do no referente a letra*/
         if (indice >= 0) {
-            if (!aux->filhos[indice])
+            if (!aux->filhos[indice])                               /*Se essa letra referente ao indice nao existir, ele criara o nodo para aquela letra*/
                 aux->filhos[indice] = criaNo ();
-            aux = aux->filhos[indice];                
+            aux = aux->filhos[indice];                              
         }
     }    
-    aux->fim = 1;
-    aux->valor = valor;
+    aux->fim = 1;                                                   /*Quando chega ao final da palavra é setado essa variavel*/
+    aux->valor = valor;                                             /*valor para cada palavra, professor comentou isso em aula.*/
 }
 
+/* Função de busca apenas para encontrar uma determinada palavra na arvore trie*/
 struct no* busca (PONT raiz, char *chave) {
     if (!raiz || !chave) return NULL;
 
@@ -79,10 +86,12 @@ struct no* busca (PONT raiz, char *chave) {
     return aux;
 }
 
+
 char converteIndiceParaLetra(int indice) {
      return indice + 'a';
  }
 
+/*Usado para imprimir a arvore de forma tabulada (como se fosse realmente um arvore)*/
 void imprimeTabulacao(int nivel) {
     for (int i = 0; i < nivel; i++) {
         printf("\t");
@@ -98,8 +107,6 @@ void imprimeArvore (PONT raiz, int nivel) {
             printf ("%c\n", converteIndiceParaLetra(i));
             if (raiz->filhos[i]->fim) {
                 imprimeTabulacao(nivel + 1);
-                printf ("\\0\n");
-                //printf ("%c\n", converteIndiceParaLetra(0));
             }
             imprimeArvore (raiz->filhos[i], nivel + 1);
         }
@@ -118,8 +125,9 @@ void imprime (PONT raiz, char *chave) {
 }
 
 
-/*************************************************************************************** */
+/****************************** Funcoes que serão utilizadas com o dicionario ********************************************************* */
 
+/* Recebe o arquivo .txt do dicionario passado como parametro e retorna como arquivo FILE* */
 FILE *abreDicionario (char *arquivo) {
     if (!arquivo) {
         fprintf (stderr, "Impossivel abrir o dicionario\n");
@@ -134,6 +142,7 @@ FILE *abreDicionario (char *arquivo) {
 
 }
 
+/* Remove o caracter "\n" da linha que estamos lendo do arquivo de entrada.txt */
 void removeNovaLinha(char *linha) {
     if (!linha) {
         fprintf(stderr, "Erro ao tentar remover \\n da palavra\n");
@@ -145,13 +154,12 @@ void removeNovaLinha(char *linha) {
     }
 }
 
-
+/* Função responsavel por preencher toda a arvore com os caracteres das palavras passadas pelo dicionario*/
 int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
     if (!raiz || !dicionario) {
         fprintf (stderr, "Erro ao preencher arvore com o dicionario\n");
         return 1;
     }
-
     int i = 0;
     char linha[100] = {0};
 
@@ -159,20 +167,21 @@ int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
         removeNovaLinha (linha);
         insere (raiz, linha, i++);
     }
-
     return 0;
 }
 
 
-/*Funcao principal, não testei ela.*/
-void busca_ (PONT raiz, const char *palavra, int errosMaximos, char *palavraAtual, int nivel, int *dp) {
-    // Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual
-    if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {
-        palavraAtual[nivel] = '\0';
-        printf("%s\n", palavraAtual);  // Imprime a palavra atual
-    }
+/*Funcao principal, não testei ela. Peguei da net e fiz alteracoes*/
 
-    // Se a raiz é nula ou a palavra está vazia, retorna
+void busca_ (PONT raiz, const char *palavra, int errosMaximos, 
+            char *palavraAtual, int nivel, int *dp) {
+                
+    
+    if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {                 /* Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual*/
+        palavraAtual[nivel] = '\0';
+        printf("%s, ", palavraAtual);                                       // Imprime a palavra atual que foi encontrada dentro do limite de erros
+    }
+   
     if (raiz == NULL || *palavra == '\0') return;
 
     // Array para armazenar a DP atual
@@ -216,13 +225,15 @@ void busca_ (PONT raiz, const char *palavra, int errosMaximos, char *palavraAtua
 }
 
 void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
-    char palavraAtual[100];  // Buffer para armazenar a palavra atual durante a busca
-    int dp[strlen(palavra) + 1];  // Array para a DP, de tamanho igual ao comprimento da palavra + 1
-    // Inicializa dp com valores de 0 a strlen(palavra)
-    for (int i = 0; i <= strlen(palavra); i++) {
+    char palavraAtual[100];                                                     // Buffer para armazenar a palavra atual durante a busca
+    int dp[strlen(palavra) + 1];                                                // Array para a DP, de tamanho igual ao comprimento da palavra + 1
+  
+    for (int i = 0; i <= strlen(palavra); i++) {                                // Inicializa dp com valores de 0 a strlen(palavra)           
         dp[i] = i;
     }
-    busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp);  // Chama a função busca
+    printf ("%s:", palavra);
+    busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp);  
+    printf ("\n");
 }
 
 // Funcao responsavel por separar as palavras dependendo de um char separador
