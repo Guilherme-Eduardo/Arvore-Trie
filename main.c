@@ -26,12 +26,6 @@ int main (int argc, char* argv[]) {
         distanciaEdicaoStr = separa (palavra, ' ');
         distanciaEdicaoNum = atoi (distanciaEdicaoStr);
         printf ("nome: %s\nErros: %d\n", copiaPalavra, distanciaEdicaoNum);
-        //buscaPalavras (raiz, palavra, distanciaEdicao);
-
-        /*
-        separador da palavra e erro
-        busca (palavra, erro);
-        */
     }
 
 

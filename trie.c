@@ -163,6 +163,8 @@ int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
     return 0;
 }
 
+
+/*Funcao principal, não testei ela.*/
 void busca_ (PONT raiz, const char *palavra, int errosMaximos, char *palavraAtual, int nivel, int *dp) {
     // Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual
     if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {
