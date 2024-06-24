@@ -235,7 +235,8 @@ void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
         dp[i] = i;
     }
     printf ("%s:", palavra);
-    busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp, &maxPalavras);  
+    if (errosMaximos >= 0 && errosMaximos < 4)
+        busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp, &maxPalavras);  
     printf ("\n");
 }
 

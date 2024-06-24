@@ -16,10 +16,10 @@ int main (int argc, char* argv[]) {
         Nome do arquivo = executavel se chamara dicionario OK
         como eu chamo a o dicionario.o
         como eu insiro ao dicionario
-        max de palavras lidas é 20
-        max de erro é 3
+        max de palavras lidas é 20 = OK
+        max de erro é 3 = OK
         alterar formatacao da saida.txt
-        Fazer Makefile
+        Fazer Makefile = OK
     
     */
     if (argc <= 1 ) {
@@ -35,18 +35,19 @@ int main (int argc, char* argv[]) {
     FILE *dicionario = abreDicionario (argv[1]);                    /*Aqui eu estou passando o dicionario do argv e adicionando ele na variavel FILE */
     preencheArvoreComDicionario (raiz, dicionario);                 /*Lê arquivo e joga na arvore (é bom testar a funcao. Eu acho que está funcionando (usei a funcao imprime para isso))*/
         
-   while (fgets (linha, sizeof(linha), stdin)) {                   /*Enquanto nao chega no fim do arquivo que foi mandado pela entrada padrao (stdin) faça...*/
+   while (fgets (linha, sizeof(linha), stdin) != NULL) {                   /*Enquanto nao chega no fim do arquivo que foi mandado pela entrada padrao (stdin) faça...*/
         palavra = separa (linha, ' ');                              /*Separo as informacoes que foram passadas no arquivo de entrada em 2 variaveis*/
         strcpy (copiaPalavra, palavra);
         palavra += strlen (palavra) + 1;
         distanciaEdicaoStr = separa (palavra, ' ');
-        distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
-        //printf ("nome: %s\nErros: %d\n", copiaPalavra, distanciaEdicaoNum);
-        if (palavra && distanciaEdicaoNum <= 3)
+        if (distanciaEdicaoStr)
+            distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
+        if (palavra && distanciaEdicaoStr)
             buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
-
-        /*O método que está no enunciado é o de distancia de edição, é um pouco confuso no começo, mas da pra entender. Usa como se fosse uma matriz para comparar o quanto uma palavra esta distante da outra*/
-
+        else {
+            palavra =  NULL;
+            distanciaEdicaoStr = NULL;
+        }
     }
 
     //testes que eu fiz
