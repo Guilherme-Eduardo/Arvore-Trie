@@ -1,5 +1,5 @@
-#ifndef _TRIE_H
-#define _TRIE_H
+#ifndef _DICIONARIO_H
+#define _DICIONARIO_H
 
 #define N_ALFABETO 26
 

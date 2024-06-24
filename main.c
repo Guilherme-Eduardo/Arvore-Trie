@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "trie.h"
+#include "dicionario.h"
 
 int main (int argc, char* argv[]) {
 
@@ -11,6 +11,15 @@ int main (int argc, char* argv[]) {
         só sei que precisamos passar o teste e depois jogar a saida num outro arquivo
         ex: ./<nome_do_programa> < entrada.txt > saida.txt
         Além disso, precisamos ver como cada arquivo ira se chamar
+
+
+        Nome do arquivo = executavel se chamara dicionario OK
+        como eu chamo a o dicionario.o
+        como eu insiro ao dicionario
+        max de palavras lidas é 20
+        max de erro é 3
+        alterar formatacao da saida.txt
+        Fazer Makefile
     
     */
     if (argc <= 1 ) {
@@ -33,7 +42,8 @@ int main (int argc, char* argv[]) {
         distanciaEdicaoStr = separa (palavra, ' ');
         distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
         //printf ("nome: %s\nErros: %d\n", copiaPalavra, distanciaEdicaoNum);
-        buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
+        if (palavra && distanciaEdicaoNum <= 3)
+            buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
 
         /*O método que está no enunciado é o de distancia de edição, é um pouco confuso no começo, mas da pra entender. Usa como se fosse uma matriz para comparar o quanto uma palavra esta distante da outra*/
 

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "trie.h"
+#include "dicionario.h"
 
 #define N_ALFABETO 26
 
@@ -40,7 +40,7 @@ int mapearIndice(char c) {
 /*Converte todas a letras da palavra para miniscula*/
 void palavra_miniscula (char *chave) {
     if (!chave) return;    
-    int i;
+    unsigned int i;
     for (i = 0; i < strlen (chave); i++) {        
             chave[i] = tolower(chave[i]);
     }
@@ -57,7 +57,7 @@ void insere (PONT raiz, char *chave, int valor) {
     palavra_miniscula (copia_chave);       
     PONT aux = raiz;    
 
-    for (int i = 0; i < strlen (copia_chave); i++) {                /*Percorre pelo tamanho da palavra*/    
+    for (unsigned int i = 0; i < strlen (copia_chave); i++) {                /*Percorre pelo tamanho da palavra*/    
         indice = mapearIndice(copia_chave[i]);                      /*Verifica qual eh o indice do vetor do no referente a letra*/
         if (indice >= 0) {
             if (!aux->filhos[indice])                               /*Se essa letra referente ao indice nao existir, ele criara o nodo para aquela letra*/
@@ -170,16 +170,18 @@ int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
     return 0;
 }
 
-
 /*Funcao principal, não testei ela. Peguei da net e fiz alteracoes*/
-
 void busca_ (PONT raiz, const char *palavra, int errosMaximos, 
-            char *palavraAtual, int nivel, int *dp) {
-                
+            char *palavraAtual, int nivel, int *dp, int *maxPalavras) {                
     
     if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {                 /* Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual*/
-        palavraAtual[nivel] = '\0';
-        printf("%s, ", palavraAtual);                                       // Imprime a palavra atual que foi encontrada dentro do limite de erros
+        if (*maxPalavras < 20) {
+            if (*maxPalavras > 0)
+                printf (", ");
+            palavraAtual[nivel] = '\0';
+            printf("%s", palavraAtual);                                       // Imprime a palavra atual que foi encontrada dentro do limite de erros
+            (*maxPalavras)++;
+        }
     }
    
     if (raiz == NULL || *palavra == '\0') return;
@@ -219,20 +221,21 @@ void busca_ (PONT raiz, const char *palavra, int errosMaximos,
             }
 
             // Chama recursivamente para o próximo nível da trie
-            busca_ (raiz->filhos[i], palavra, errosMaximos, palavraAtual, nivel + 1, dpAtual);
+            busca_ (raiz->filhos[i], palavra, errosMaximos, palavraAtual, nivel + 1, dpAtual, maxPalavras);
         }
     }
 }
 
 void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
     char palavraAtual[100];                                                     // Buffer para armazenar a palavra atual durante a busca
-    int dp[strlen(palavra) + 1];                                                // Array para a DP, de tamanho igual ao comprimento da palavra + 1
+    int dp[strlen(palavra) + 1];                                               // Array para a DP, de tamanho igual ao comprimento da palavra + 1
+    int maxPalavras = 0;
   
-    for (int i = 0; i <= strlen(palavra); i++) {                                // Inicializa dp com valores de 0 a strlen(palavra)           
+    for (unsigned int i = 0; i <= strlen(palavra); i++) {                                // Inicializa dp com valores de 0 a strlen(palavra) | distancia de edicao (primeira linha)       
         dp[i] = i;
     }
     printf ("%s:", palavra);
-    busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp);  
+    busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp, &maxPalavras);  
     printf ("\n");
 }
 
