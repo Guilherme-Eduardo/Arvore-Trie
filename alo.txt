@@ -1,3 +1,4 @@
+adriatico:adriatico
 alberta:alberta, albertina
 aberta:alberta
 boiada:boiaras

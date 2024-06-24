@@ -15,7 +15,7 @@ typedef struct no* PONT;
 /* Definição das funcoes do TAD Arvore Trie */
 
 struct no* criaNo ();
-/*struct no* destroiNo (struct no*);*/
+void destroiArvore (PONT);
 void insere (PONT, char*, int);
 struct no* busca (PONT,char*);
 void imprimeArvore (PONT, int);

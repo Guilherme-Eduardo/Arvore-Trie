@@ -26,10 +26,20 @@ struct no* criaNo () {
 }
 
 /*Funcao responsavel por liberar toda a memoria do no*/
-/*void destroi_no () {
+void destroiArvore(PONT raiz) {
+    if (!raiz) return;
 
+    // Percorre todos os filhos do nó atual
+    for (unsigned int i = 0; i < N_ALFABETO; i++) {
+        if (raiz->filhos[i]) {
+            destroiArvore (raiz->filhos[i]);
+            raiz->filhos[i] = NULL; // Importante definir como NULL após a destruição
+        }
+    }
 
-}*/
+    // Após destruir todos os filhos, libera o nó atual
+    free(raiz);
+}
 
 /* Informa qual é o indice do vetor referente a letra. Ex: a == 0 (97 - 97), b == 1 ...*/
 int mapearIndice(char c) {

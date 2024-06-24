@@ -20,6 +20,7 @@ int main (int argc, char* argv[]) {
         max de erro é 3 = OK
         alterar formatacao da saida.txt
         Fazer Makefile = OK
+        remover o ternario da funcao busca
     
     */
     if (argc <= 1 ) {
@@ -49,6 +50,8 @@ int main (int argc, char* argv[]) {
             distanciaEdicaoStr = NULL;
         }
     }
+
+    destroiArvore (raiz);
 
     //testes que eu fiz
 
