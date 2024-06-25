@@ -12,7 +12,6 @@ int main (int argc, char* argv[]) {
         ex: ./<nome_do_programa> < entrada.txt > saida.txt
         Além disso, precisamos ver como cada arquivo ira se chamar
 
-
         Nome do arquivo = executavel se chamara dicionario OK
         como eu chamo a o dicionario.o
         como eu insiro ao dicionario
@@ -45,43 +44,10 @@ int main (int argc, char* argv[]) {
             distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
         if (palavra && distanciaEdicaoStr)
             buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
-        else {
-            palavra =  NULL;
-            distanciaEdicaoStr = NULL;
-        }
     }
 
-    destroiArvore (raiz);
-
-    //testes que eu fiz
-
-    /*
-    insere (raiz, "GUILHERME", 12);
-    insere (raiz,"gui o BRabo", 14);
-    insere (raiz,"gui a maquina", 10);
-
-    printf ("hello world\n");
-    imprimeArvore(raiz, 0);
-
-    if (busca (raiz, "guilherme")) 
-        printf ("encontrei\n");
-    else printf ("Nao encontrei a palavra\n");
-
-    imprimeArvore (raiz, 0);
-
-
-    insere (raiz,"rocky", 19);
-    insere (raiz,"rocky i", 20);
-    insere (raiz,"rocky ii", 21);
-    insere (raiz,"rocky iii", 22);
-
-    imprimeArvore(raiz, 0);
-
-    */
-
-    
+    destroiArvore (raiz);    
     fclose (dicionario);
     return 0;
 }
 
-//arrumar a impressao do \0

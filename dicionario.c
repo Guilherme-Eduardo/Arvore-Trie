@@ -1,8 +1,3 @@
-/*
-    verificar se ele insere nomes duplicados
-    verificar se é preciso colocar o caracter '\0' na arvore
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,16 +24,12 @@ struct no* criaNo () {
 void destroiArvore(PONT raiz) {
     if (!raiz) return;
 
-    // Percorre todos os filhos do nó atual
     for (unsigned int i = 0; i < N_ALFABETO; i++) {
         if (raiz->filhos[i]) {
-            destroiArvore (raiz->filhos[i]);
-            raiz->filhos[i] = NULL; // Importante definir como NULL após a destruição
+            destroiArvore (raiz->filhos[i]);            
         }
-    }
-
-    // Após destruir todos os filhos, libera o nó atual
-    free(raiz);
+    }   
+    free(raiz);                                                                                 /*Após destruir todos os filhos, libera o nó atual*/
 }
 
 /* Informa qual é o indice do vetor referente a letra. Ex: a == 0 (97 - 97), b == 1 ...*/
@@ -95,7 +86,6 @@ struct no* busca (PONT raiz, char *chave) {
     }
     return aux;
 }
-
 
 char converteIndiceParaLetra(int indice) {
      return indice + 'a';
@@ -184,39 +174,39 @@ int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
 void busca_ (PONT raiz, const char *palavra, int errosMaximos, 
             char *palavraAtual, int nivel, int *dp, int *maxPalavras) {                
     
-    if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {                 /* Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual*/
-        if (*maxPalavras < 20) {
+    if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {                     /* Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual */
+        if (*maxPalavras < 20) {                                                /* Limite de impressao de palavras similares */
             if (*maxPalavras > 0)
                 printf (", ");
             palavraAtual[nivel] = '\0';
-            printf("%s", palavraAtual);                                       // Imprime a palavra atual que foi encontrada dentro do limite de erros
+            printf("%s", palavraAtual);                                         /*Imprime a palavra atual que foi encontrada dentro do limite de erros*/
             (*maxPalavras)++;
         }
     }
    
     if (raiz == NULL || *palavra == '\0') return;
 
-    // Array para armazenar a DP atual
-    int dpAtual[N_ALFABETO + 1];
-    // Inicializa dpAtual com os valores de dp incrementados por 1
-    for (int i = 0; i <= N_ALFABETO; i++) {
+    
+    int dpAtual[N_ALFABETO + 1];                                                 /*Array para armazenar a DP atual */
+
+    
+    for (int i = 0; i <= N_ALFABETO; i++) {                                     /*Inicializa dpAtual com os valores de dp incrementados por 1*/
         dpAtual[i] = dp[i] + 1;
     }
 
-    // Itera sobre todos os possíveis caracteres (26 letras + espaço)
     for (int i = 0; i < N_ALFABETO; i++) {
         if (raiz->filhos[i]) {
-            char c = (i == 26) ? ' ' : 'a' + i;  // Determina o caractere correspondente
-            palavraAtual[nivel] = c;  // Adiciona o caractere à palavra atual
+            char c = 'a' + i;                                                   /* Determina o caractere correspondente */ 
+            palavraAtual[nivel] = c;                                            /* Adiciona o caractere à palavra atual */ 
 
-            dpAtual[0] = dp[0] + 1;  // Inicializa dpAtual[0]
+            dpAtual[0] = dp[0] + 1;                                             //*Inicializa dpAtual[0] /*
             for (int j = 1; palavra[j - 1]; j++) {
                 if (tolower(palavra[j - 1]) == c) {
-                    dpAtual[j] = dp[j - 1];  // Se os caracteres são iguais, herda o valor de dp[j - 1]
-                } else {
-                    int min1 = dp[j];
-                    int min2 = dp[j - 1];
-                    int min3 = dpAtual[j - 1];
+                    dpAtual[j] = dp[j - 1];                                     /* Se os caracteres são iguais, herda o valor de dp[j - 1]*/
+                } else {                                                        /* Tentar encontrar o minimo */
+                    int min1 = dp[j];                                           /* Inserção: dp[j] + 1*/
+                    int min2 = dp[j - 1];                                       /*  dp[j - 1] + 1 */
+                    int min3 = dpAtual[j - 1];                                  /* Substituição: dpAtual[j - 1] + 1*/
                     int minimo = min1;
 
                     if (min2 < minimo) {
@@ -226,11 +216,9 @@ void busca_ (PONT raiz, const char *palavra, int errosMaximos,
                         minimo = min3;
                     }
 
-                    dpAtual[j] = 1 + minimo;  // Calcula o mínimo entre os valores de dp[j], dp[j - 1] e dpAtual[j - 1], incrementado por 1
+                    dpAtual[j] = 1 + minimo;                                    /* Calcula o mínimo entre os valores de dp[j], dp[j - 1] e dpAtual[j - 1], incrementado por 1 */
                 }
-            }
-
-            // Chama recursivamente para o próximo nível da trie
+            }            
             busca_ (raiz->filhos[i], palavra, errosMaximos, palavraAtual, nivel + 1, dpAtual, maxPalavras);
         }
     }
@@ -291,4 +279,14 @@ str1 e str2 não são apenas strings idênticas, elas são exatamente a mesma st
 Isso abre a possibilidade de diversos problemas com strings sendo declaradas em arquivos diferentes sendo acidentalmente modificadas. Por tal razão o compilador irá tentar te impedir de modificar tais strings, e você também deveria evitar faze-lo, mesmo que consiga burlar a verificação.
 
 será que realmente é necessario a palavra receber um valor?
-distancia de edição*/
+
+
+dp = distancia de edicao
+
+dpAtual[j] é calculado considerando as três operações possíveis:
+
+Inserção: dp[j] + 1
+Deleção: dp[j - 1] + 1
+Substituição: dpAtual[j - 1] + 1
+
+*/
