@@ -43,7 +43,7 @@ int main (int argc, char* argv[]) {
         if (distanciaEdicaoStr)
             distanciaEdicaoNum = atoi (distanciaEdicaoStr);             /*Converto a string numero para int numero*/
         if (palavra && distanciaEdicaoStr)
-            buscaPalavras (raiz, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
+            buscaPalavras (raiz, dicionario, copiaPalavra, distanciaEdicaoNum);     /*Entra na funcao que procura as palavras na arvore*/
     }
 
     destroiArvore (raiz);    

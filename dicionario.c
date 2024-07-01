@@ -170,8 +170,27 @@ int preencheArvoreComDicionario (PONT raiz, FILE *dicionario) {
     return 0;
 }
 
+void imprimePalavra(FILE *arquivo, int valor) {
+    if (!arquivo) return;
+
+    char linha[100];
+    char *token;
+    int i = 0;
+    rewind (arquivo);
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        if (i == valor) {
+            token = strtok(linha, " ");
+            token [strlen (token + 1)] = '\0';
+            printf("%s", token);
+            return; // Após encontrar a palavra, podemos retornar
+        }
+        i++;
+    }
+}
+
 /*Funcao principal, não testei ela. Peguei da net e fiz alteracoes*/
-void busca_ (PONT raiz, const char *palavra, int errosMaximos, 
+void busca_ (PONT raiz, FILE *dicionario, const char *palavra, int errosMaximos, 
             char *palavraAtual, int nivel, int *dp, int *maxPalavras) {                
     
     if (raiz->fim && dp[strlen(palavra)] <= errosMaximos) {                     /* Se é o final de uma palavra e o número de erros é permitido, imprime palavraAtual */
@@ -179,7 +198,8 @@ void busca_ (PONT raiz, const char *palavra, int errosMaximos,
             if (*maxPalavras > 0)
                 printf (", ");
             palavraAtual[nivel] = '\0';
-            printf("%s", palavraAtual);                                         /*Imprime a palavra atual que foi encontrada dentro do limite de erros*/
+            //printf("%s", palavraAtual);                                         /*Imprime a palavra atual que foi encontrada dentro do limite de erros*/
+            imprimePalavra (dicionario, raiz->valor);
             (*maxPalavras)++;
         }
     }
@@ -219,12 +239,12 @@ void busca_ (PONT raiz, const char *palavra, int errosMaximos,
                     dpAtual[j] = 1 + minimo;                                    /* Calcula o mínimo entre os valores de dp[j], dp[j - 1] e dpAtual[j - 1], incrementado por 1 */
                 }
             }            
-            busca_ (raiz->filhos[i], palavra, errosMaximos, palavraAtual, nivel + 1, dpAtual, maxPalavras);
+            busca_ (raiz->filhos[i], dicionario, palavra, errosMaximos, palavraAtual, nivel + 1, dpAtual, maxPalavras);
         }
     }
 }
 
-void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
+void buscaPalavras(PONT raiz, FILE *dicionario, const char *palavra, int errosMaximos) {
     char palavraAtual[100];                                                     // Buffer para armazenar a palavra atual durante a busca
     int dp[strlen(palavra) + 1];                                               // Array para a DP, de tamanho igual ao comprimento da palavra + 1
     int maxPalavras = 0;
@@ -234,7 +254,7 @@ void buscaPalavras(PONT raiz, const char *palavra, int errosMaximos) {
     }
     printf ("%s:", palavra);
     if (errosMaximos >= 0 && errosMaximos < 4)
-        busca_(raiz, palavra, errosMaximos, palavraAtual, 0, dp, &maxPalavras);  
+        busca_(raiz, dicionario, palavra, errosMaximos, palavraAtual, 0, dp, &maxPalavras);  
     printf ("\n");
 }
 

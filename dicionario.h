@@ -25,7 +25,7 @@ void imprimeArvore (PONT, int);
 
 FILE *abreDicionario (char *);
 int preencheArvoreComDicionario (PONT, FILE*);
-void buscaPalavras(PONT, const char *, int);
+void buscaPalavras(PONT, FILE*, const char *, int);
 char *separa(char *, char);
 void removeNovaLinha(char *);
 
