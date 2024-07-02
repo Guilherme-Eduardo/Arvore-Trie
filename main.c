@@ -5,23 +5,6 @@
 
 int main (int argc, char* argv[]) {
 
-    /* 
-        Precisamos ver como ira funcionar essa questao de passar o dicionario como parametro da funcao, pois o professor não explicou isso
-        digo "./<nome_do_programa> dicionario.txt" ----> não sei se é essa forma de passar o dicionario.
-        só sei que precisamos passar o teste e depois jogar a saida num outro arquivo
-        ex: ./<nome_do_programa> < entrada.txt > saida.txt
-        Além disso, precisamos ver como cada arquivo ira se chamar
-
-        Nome do arquivo = executavel se chamara dicionario OK
-        como eu chamo a o dicionario.o
-        como eu insiro ao dicionario
-        max de palavras lidas é 20 = OK
-        max de erro é 3 = OK
-        alterar formatacao da saida.txt
-        Fazer Makefile = OK
-        remover o ternario da funcao busca
-    
-    */
     if (argc <= 1 ) {
         fprintf (stderr, "Erro ao abrir arquivos\n");
         return 1;
